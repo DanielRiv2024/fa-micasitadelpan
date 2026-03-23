@@ -31,17 +31,17 @@ export default function Sidebar() {
     router.push("/");
   };
 
-  const adminMenu = [
-    { name: "Empleados", path: "/admin/employees", icon: <FaUsers /> },
-    { name: "Horarios", path: "/admin/schedules", icon: <FaClock /> },
-    { name: "Rutas", path: "/admin/routes", icon: <FaRoute /> },
-    { name: "Venta Movil", path: "/admin/mobile-sales", icon: <MdPointOfSale /> },
-    { name: "Analisis", path: "/admin/analytics", icon: <FaChartLine /> },
+  const dashboardMenu = [
+    { name: "Empleados", path: "/dashboard/employees", icon: <FaUsers /> },
+    { name: "Horarios", path: "/dashboard/schedules", icon: <FaClock /> },
+    { name: "Rutas", path: "/dashboard/routes", icon: <FaRoute /> },
+    { name: "Venta Movil", path: "/dashboard/mobile-sales", icon: <MdPointOfSale /> },
+    { name: "Analisis", path: "/dashboard/analytics", icon: <FaChartLine /> },
     { name: "Productos", path: "/dashboard/products", icon: <FaBox /> },
     { name: "Categorias", path: "/dashboard/categories", icon: <FaBox /> },
-    { name: "Inventario", path: "/admin/inventory", icon: <FaWarehouse /> },
-    { name: "Venta", path: "/admin/sales", icon: <FaShoppingCart /> },
-    { name: "Tareas", path: "/admin/tasks", icon: <FaTasks /> },
+    { name: "Inventario", path: "/dashboard/inventory", icon: <FaWarehouse /> },
+    { name: "Venta", path: "/dashboard/sales", icon: <FaShoppingCart /> },
+    { name: "Tareas", path: "/dashboard/tasks", icon: <FaTasks /> },
   ];
 
   const employeeMenu = [
@@ -52,7 +52,7 @@ export default function Sidebar() {
     { name: "Perfil", path: "/employee/profile", icon: <FaUser /> },
   ];
 
-  const menu = role === 0 ? adminMenu : employeeMenu;
+  const menu = role === 0 ? dashboardMenu : employeeMenu;
 
   return (
     <div className="w-64 h-screen flex flex-col bg-white border-r border-gray-100 shadow-xl">
@@ -66,7 +66,7 @@ export default function Sidebar() {
           <div>
             <h2 className="text-lg font-bold text-white leading-none">P007 AP</h2>
             <p className="text-blue-200 text-xs mt-0.5">
-              {role === 0 ? "Administrador" : "Empleado"}
+              {role === 0 ? "dashboardistrador" : "Empleado"}
             </p>
           </div>
         </div>
