@@ -297,24 +297,69 @@ export default function SchedulesPage() {
                         {HOURS.map((h) => (
                           <div key={h} className="absolute w-full border-t border-gray-50" style={{ top: h * 48 }} />
                         ))}
-                        {daySchedules.map((s) => {
-                          const colorIdx = userColorIdx(s.user_id);
-                          const [sh, sm] = (s.start_time ?? "00:00").split(":").map(Number);
-                          const [eh, em] = (s.end_time   ?? "00:00").split(":").map(Number);
-                          const top    = (sh + sm / 60) * 48;
-                          const height = Math.max((eh + em / 60 - sh - sm / 60) * 48, 20);
-                          return (
-                            <div
-                              key={s.id}
-                              className={`absolute left-1 right-1 rounded-lg border px-1.5 py-1 overflow-hidden ${COLORS_LIGHT[colorIdx]}`}
-                              style={{ top, height }}
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              <p className="text-[10px] font-bold truncate leading-tight">{s.users?.name ?? "—"}</p>
-                              <p className="text-[9px] opacity-70 leading-tight">{fmt12(s.start_time?.slice(0,5))} - {fmt12(s.end_time?.slice(0,5))}</p>
-                            </div>
-                          );
-                        })}
+
+
+
+
+
+
+{daySchedules.map((s) => {
+  const colorIdx = userColorIdx(s.user_id);
+
+  const [sh, sm] = (s.start_time ?? "00:00").split(":").map(Number);
+  const [eh, em] = (s.end_time ?? "00:00").split(":").map(Number);
+
+  const start = sh + sm / 60;
+  const end   = eh + em / 60;
+
+  const top    = start * 48;
+  const height = Math.max((end - start) * 48, 20);
+
+  // 🔥 SOLO agrupar si empiezan exactamente igual
+  const sameStart = daySchedules.filter(
+    (x) => x.start_time === s.start_time
+  );
+
+  const index = sameStart.findIndex((x) => x.id === s.id);
+  const total = sameStart.length;
+
+  const width = total > 1 ? 100 / total : 100;
+  const left  = total > 1 ? index * width : 0;
+
+  // 🔥 zIndex basado en hora de inicio
+  const zIndex = Math.floor(start * 100); 
+  // más tarde = más arriba
+
+  return (
+    <div
+      key={s.id}
+      className={`absolute rounded-lg border px-1.5 py-1 overflow-hidden ${COLORS_LIGHT[colorIdx]}`}
+      style={{
+        top,
+        height,
+        width: `${width}%`,
+        left: `${left}%`,
+        zIndex,
+      }}
+      onClick={(e) => e.stopPropagation()}
+    >
+      <p className="text-[10px] font-bold truncate leading-tight">
+        {s.users?.name ?? "—"}
+      </p>
+      <p className="text-[9px] opacity-70 leading-tight">
+        {fmt12(s.start_time?.slice(0,5))} - {fmt12(s.end_time?.slice(0,5))}
+      </p>
+    </div>
+  );
+})}
+
+
+
+
+
+
+
+
                       </div>
                     );
                   })}
