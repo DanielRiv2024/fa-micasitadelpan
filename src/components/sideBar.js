@@ -35,7 +35,7 @@ export default function Sidebar() {
     { name: "Empleados", path: "/dashboard/employees", icon: <FaUsers /> },
     { name: "Horarios", path: "/dashboard/schedules", icon: <FaClock /> },
     { name: "Rutas", path: "/dashboard/routes", icon: <FaRoute /> },
-    { name: "Venta Movil", path: "/dashboard/mobile-sales", icon: <MdPointOfSale /> },
+    { name: "Venta Movil", path: "/dashboard/seller-trips", icon: <MdPointOfSale /> },
     { name: "Analisis", path: "/dashboard/analytics", icon: <FaChartLine /> },
     { name: "Productos", path: "/dashboard/products", icon: <FaBox /> },
     { name: "Categorias", path: "/dashboard/categories", icon: <FaBox /> },

@@ -86,7 +86,7 @@ export default function ProductsPage() {
             <p className="text-xs text-gray-400 mt-0.5">Gestiona tu catálogo de productos</p>
           </div>
           <button
-            onClick={() => router.push("/admin/products/new")}
+            onClick={() => router.push("/dashboard/products/new")}
             className="flex items-center gap-2 bg-[#1447E6] hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-all duration-200 shadow-md shadow-blue-200 active:scale-95"
           >
             <FiPlus className="text-base" />
@@ -193,7 +193,7 @@ export default function ProductsPage() {
                   filtered.map((product) => (
                     <tr
                       key={product.id}
-                      onClick={() => router.push(`/admin/products/${product.id}`)}
+                      onClick={() => router.push(`/dashboard/products/${product.id}`)}
                       className="border-b border-gray-50 hover:bg-blue-50/40 cursor-pointer transition-colors duration-150"
                     >
                       <td className="px-5 py-3.5">
