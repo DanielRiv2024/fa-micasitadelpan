@@ -1,4 +1,4 @@
-// src/app/admin/schedules/page.jsx
+
 "use client";
 import { useState, useEffect } from "react";
 import Sidebar from "@/components/sideBar";

@@ -102,7 +102,7 @@ export default function NewSellerTripPage() {
     setError(null);
     try {
       await sellerTripService.create({ userId: selectedUser, notes, items: selectedItems });
-      router.push("/admin/seller-trips");
+      router.push("/dashboard/seller-trips");
     } catch (e) {
       setError(e.message);
     } finally {
@@ -228,7 +228,7 @@ export default function NewSellerTripPage() {
                       {products.map((p) => (
                         <tr
                           key={p.id}
-                          className={`border-b border-gray-50 transition-colors ${quantities[p.id] > 0 ? "bg-blue-50/30" : ""}`}
+                          className={`border-b border-gray-50 transition-colors ${quantities[p.id] > 0 ? "bg-green-100" : ""}`}
                         >
                           <td className="px-6 py-3 font-medium text-gray-700">{p.name}</td>
                           <td className="px-4 py-3 text-gray-500">{fmt(p.sale_price)}</td>

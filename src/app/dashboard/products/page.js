@@ -1,4 +1,4 @@
-// app/admin/products/page.jsx
+
 "use client";
 import Sidebar from "@/components/sideBar";
 import { useState, useEffect } from "react";

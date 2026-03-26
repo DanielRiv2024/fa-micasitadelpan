@@ -91,6 +91,15 @@ export const sellerTripService = {
     return data;
   },
 
+  // Actualiza un item individual (para edicion de viaje completado)
+  async updateTripItem(itemId, fields) {
+    const { error } = await supabase
+      .from("seller_trip_items")
+      .update(fields)
+      .eq("id", itemId);
+    if (error) throw error;
+  },
+
   async remove(id) {
     const { error } = await supabase
       .from("seller_trips")
