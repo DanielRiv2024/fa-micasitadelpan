@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@supabase/supabase-js";
-
+import Loading from "@/components/loading";
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
@@ -10,7 +10,7 @@ const supabase = createClient(
 
 export default function LoginPage() {
   const router = useRouter();
-
+const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -24,35 +24,45 @@ export default function LoginPage() {
   };
 
   const handleLogin = async () => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: form.email,
-      password: form.password,
-    });
+  if (!form.email || !form.password) {
+    alert("Completa todos los campos");
+    return;
+  }
 
-    if (error) {
-      alert("Credenciales incorrectas");
-      return;
-    }
+  setLoading(true);
 
-    const userId = data.user.id;
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: form.email,
+    password: form.password,
+  });
 
-    const { data: userData, error: roleError } = await supabase
-      .from("users")
-      .select("role")
-      .eq("id", userId)
-      .single();
+  if (error) {
+    alert("Credenciales incorrectas");
+    setLoading(false);
+    return;
+  }
 
-    if (roleError || !userData) {
-      alert("Error obteniendo rol");
-      return;
-    }
+  const userId = data.user.id;
 
-    const role = userData.role;
+  const { data: userData, error: roleError } = await supabase
+    .from("users")
+    .select("role")
+    .eq("id", userId)
+    .single();
 
-    localStorage.setItem("role", role);
+  if (roleError || !userData) {
+    alert("Error obteniendo rol");
+    setLoading(false);
+    return;
+  }
 
-    router.push("/dashboard/leading");
-  };
+  const role = userData.role;
+
+  localStorage.setItem("role", role);
+
+  router.push("/dashboard/analytics");
+};
+if (loading) return <Loading />;
 
   return (
     <div className="min-h-screen flex flex-col justify-between bg-gradient-to-br from-blue-50 via-sky-50 to-blue-100">

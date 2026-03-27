@@ -2,49 +2,99 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
+import { supabase } from "@/app/lib/supabase";
 import {
   FaUsers, FaClock, FaRoute, FaChartLine, FaBox,
   FaWarehouse, FaShoppingCart, FaTasks, FaUser,
-  FaCalendarWeek, FaSignOutAlt,FaArchive 
+  FaCalendarWeek, FaSignOutAlt, FaArchive
 } from "react-icons/fa";
 import { MdPointOfSale } from "react-icons/md";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
 export default function Sidebar() {
-  const [role, setRole]         = useState(null);
-  const [collapsed, setCollapsed] = useState(false);
-  const router   = useRouter();
+  const [role, setRole] = useState(null);
+  const [mounted, setMounted] = useState(false);
+  const [collapsed, setCollapsed] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("sidebar-collapsed") === "true";
+    }
+    return false;
+  });
+  const router = useRouter();
   const pathname = usePathname();
 
+  useEffect(() => {
+    localStorage.setItem("sidebar-collapsed", collapsed);
+  }, [collapsed]);
   useEffect(() => {
     const storedRole = localStorage.getItem("role");
     setRole(Number(storedRole));
   }, []);
+useEffect(() => {
+  setMounted(true);
+}, []);
 
+
+useEffect(() => {
+  const checkAuth = async () => {
+    const { data } = await supabase.auth.getSession();
+
+    // ❌ NO hay sesión
+    if (!data.session) {
+      localStorage.clear();
+      router.push("/");
+      return;
+    }
+
+    const userId = data.session.user.id;
+
+    // 🔥 validar role REAL desde DB
+    const { data: userData } = await supabase
+      .from("users")
+      .select("role")
+      .eq("id", userId)
+      .single();
+
+    const localRole = Number(localStorage.getItem("role"));
+
+    // ❌ role manipulado
+    if (!userData || userData.role !== localRole) {
+      localStorage.clear();
+      router.push("/");
+      return;
+    }
+  };
+
+  checkAuth();
+}, []);
+
+
+
+if (!mounted) return null;
   const handleLogout = () => {
-    localStorage.setItem("role", "3");
+    localStorage.clear();
     router.push("/");
   };
 
   const dashboardMenu = [
-    { name: "Empleados",   path: "/dashboard/employees",    icon: <FaUsers /> },
-    { name: "Horarios",    path: "/dashboard/schedules",    icon: <FaClock /> },
-    { name: "Rutas",       path: "/dashboard/routes",       icon: <FaRoute /> },
+    { name: "Analisis", path: "/dashboard/analytics", icon: <FaChartLine /> },
+    { name: "Empleados", path: "/dashboard/employees", icon: <FaUsers /> },
+    { name: "Horarios", path: "/dashboard/schedules", icon: <FaClock /> },
+    // { name: "Rutas",       path: "/dashboard/routes",       icon: <FaRoute /> },
     { name: "Venta Movil", path: "/dashboard/seller-trips", icon: <MdPointOfSale /> },
-    { name: "Analisis",    path: "/dashboard/analytics",    icon: <FaChartLine /> },
-    { name: "Productos",   path: "/dashboard/products",     icon: <FaBox /> },
-    { name: "Categorias",  path: "/dashboard/categories",   icon: <FaArchive  /> },
-    { name: "Inventario",  path: "/dashboard/inventory",    icon: <FaWarehouse /> },
-    { name: "Venta",       path: "/dashboard/sales",        icon: <FaShoppingCart /> },
-    { name: "Tareas",      path: "/dashboard/tasks",        icon: <FaTasks /> },
+    { name: "Productos", path: "/dashboard/products", icon: <FaBox /> },
+    { name: "Categorias", path: "/dashboard/categories", icon: <FaArchive /> },
+    { name: "Inventario", path: "/dashboard/inventory", icon: <FaWarehouse /> },
+    { name: "Venta", path: "/dashboard/sales", icon: <FaShoppingCart /> },
+    // { name: "Tareas",      path: "/dashboard/tasks",        icon: <FaTasks /> },
   ];
 
   const employeeMenu = [
     { name: "Venta Movil", path: "/employee/mobile-sales", icon: <MdPointOfSale /> },
-    { name: "Panel Tareas", path: "/employee/tasks",       icon: <FaTasks /> },
-    { name: "Venta",       path: "/employee/sales",        icon: <FaShoppingCart /> },
-    { name: "Tu Semana",   path: "/employee/week",         icon: <FaCalendarWeek /> },
-    { name: "Perfil",      path: "/employee/profile",      icon: <FaUser /> },
+    { name: "Panel Tareas", path: "/employee/tasks", icon: <FaTasks /> },
+    { name: "Venta", path: "/employee/sales", icon: <FaShoppingCart /> },
+    { name: "Tu Semana", path: "/employee/week", icon: <FaCalendarWeek /> },
+    { name: "Perfil", path: "/employee/profile", icon: <FaUser /> },
   ];
 
   const menu = role === 0 ? dashboardMenu : employeeMenu;
