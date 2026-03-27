@@ -115,12 +115,16 @@ if (!mounted) return null;
       {/* Header */}
       <div className="px-4 py-6 bg-[#1447E6] overflow-hidden">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
-            <MdPointOfSale className="text-white text-xl" />
-          </div>
+       <div className="w-9 h-9 bg-white rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
+  <img
+    src="https://riverasolutons.netlify.app/_next/image?url=%2Fimages%2FRiveraSolutionsLeonLogo.png&w=128&q=75"
+    alt="Logo"
+    className="w-6 h-6 object-contain"
+  />
+</div>
           {!collapsed && (
             <div className="overflow-hidden whitespace-nowrap">
-              <h2 className="text-lg font-bold text-white leading-none">P007 AP</h2>
+              <h2 className="text-lg font-bold text-white leading-none">P002 AP</h2>
               <p className="text-blue-200 text-xs mt-0.5">
                 {role === 0 ? "Administrador" : "Empleado"}
               </p>
@@ -177,7 +181,7 @@ if (!mounted) return null;
         <button
           onClick={handleLogout}
           title={collapsed ? "Cerrar Sesión" : undefined}
-          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-red-400 hover:bg-red-50 hover:text-red-600 transition-all duration-200 group ${collapsed ? "justify-center" : ""}`}
+          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-white bg-red-500 hover:bg-red-50 hover:text-red-600 transition-all duration-200 group ${collapsed ? "justify-center" : ""}`}
         >
           <FaSignOutAlt className="text-base flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
           {!collapsed && (
